@@ -1,20 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-CPO 供應鏈一年股價資料匯出器
---------------------------------
-輸出:
-  public/data/cpo_stock_prices_1y.json
-
-用途:
-  前端可依 category（例如 ELS、CW Laser、FAU）切換公司，
-  比較美股與台股過去一年標準化股價與每日報酬。
-
-安裝:
-  python3 -m pip install -r requirements.txt
-
-執行:
-  python3 "CPO Price.py"
-"""
 
 from __future__ import annotations
 
@@ -31,6 +14,10 @@ import yfinance as yf
 #    - 排除 MACOM
 #    - 排除 Sumitomo Electric
 #    - 上櫃股票使用 .TWO
+#    - 分類與文章 BOM 表對齊：
+#      父層分類會包含其子項中的上市公司
+#      例如 Optical Engine 會帶入 MLA / PIC / PD / Packaging，
+#      ELS 會帶入 CW Laser / DFB Laser。
 # =========================================================
 
 COMPANIES = {
@@ -77,6 +64,7 @@ COMPANIES = {
         "market": "US",
         "exchange": "NASDAQ",
         "categories": [
+            "Optical Engine",
             "200G/lane Photodetector / PD",
             "ELS",
             "CW Laser",
@@ -104,63 +92,63 @@ COMPANIES = {
         "symbol": "2330",
         "market": "TW",
         "exchange": "TWSE",
-        "categories": ["PIC / SiPh Chip", "Optical Packaging"],
+        "categories": ["Optical Engine", "PIC / SiPh Chip", "Optical Packaging"],
     },
     "日月光投控": {
         "ticker": "3711.TW",
         "symbol": "3711",
         "market": "TW",
         "exchange": "TWSE",
-        "categories": ["Optical Packaging"],
+        "categories": ["Optical Engine", "Optical Packaging"],
     },
     "大立光": {
         "ticker": "3008.TW",
         "symbol": "3008",
         "market": "TW",
         "exchange": "TWSE",
-        "categories": ["MLA / Micro Optics", "Metalens", "Prism"],
+        "categories": ["Optical Engine", "MLA / Micro Optics", "Metalens", "Prism"],
     },
     "玉晶光": {
         "ticker": "3406.TW",
         "symbol": "3406",
         "market": "TW",
         "exchange": "TWSE",
-        "categories": ["MLA / Micro Optics", "Prism"],
+        "categories": ["Optical Engine", "MLA / Micro Optics", "Prism"],
     },
     "采鈺": {
         "ticker": "6789.TW",
         "symbol": "6789",
         "market": "TW",
         "exchange": "TWSE",
-        "categories": ["Metalens"],
+        "categories": ["Optical Engine", "Metalens"],
     },
     "亞光": {
         "ticker": "3019.TW",
         "symbol": "3019",
         "market": "TW",
         "exchange": "TWSE",
-        "categories": ["Metalens", "Prism"],
+        "categories": ["Optical Engine", "Metalens", "Prism"],
     },
     "中揚光": {
         "ticker": "6668.TW",
         "symbol": "6668",
         "market": "TW",
         "exchange": "TWSE",
-        "categories": ["Metalens"],
+        "categories": ["Optical Engine", "Metalens"],
     },
     "揚明光": {
         "ticker": "3504.TW",
         "symbol": "3504",
         "market": "TW",
         "exchange": "TWSE",
-        "categories": ["Prism"],
+        "categories": ["Optical Engine", "Prism"],
     },
     "先進光": {
         "ticker": "3362.TWO",
         "symbol": "3362",
         "market": "TW",
         "exchange": "TPEx",
-        "categories": ["Prism"],
+        "categories": ["Optical Engine", "Prism"],
     },
     "上詮": {
         "ticker": "3363.TWO",
@@ -199,14 +187,14 @@ COMPANIES = {
         "symbol": "4979",
         "market": "TW",
         "exchange": "TPEx",
-        "categories": ["CW Laser", "DFB Laser"],
+        "categories": ["ELS", "CW Laser", "DFB Laser"],
     },
     "光聖": {
         "ticker": "6442.TW",
         "symbol": "6442",
         "market": "TW",
         "exchange": "TWSE",
-        "categories": ["Single Mode Fiber", "MPO Connectors / Cables"],
+        "categories": ["Single Mode Fiber"],
     },
 }
 
