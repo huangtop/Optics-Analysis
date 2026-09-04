@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+.DS_Store
+.vscode/
+.idea/
+
+public/charts/
+*.png
+
+*.log
+*.tmp
