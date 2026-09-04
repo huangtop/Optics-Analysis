@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 import json
@@ -18,6 +17,8 @@ import yfinance as yf
 #      父層分類會包含其子項中的上市公司
 #      例如 Optical Engine 會帶入 MLA / PIC / PD / Packaging，
 #      ELS 會帶入 CW Laser / DFB Laser。
+#    - 新增 AAOI、AXTI、源傑科技(7917)、聯亞(3081)、全新(2455)、聯鈞(3450)。
+#    - 上游材料分類統一為 "InP Substrate / III-V Epitaxy"。
 # =========================================================
 
 COMPANIES = {
@@ -69,6 +70,28 @@ COMPANIES = {
             "ELS",
             "CW Laser",
             "DFB Laser",
+        ],
+    },
+    "Applied Optoelectronics": {
+        "ticker": "AAOI",
+        "symbol": "AAOI",
+        "market": "US",
+        "exchange": "NASDAQ",
+        "categories": [
+            "ELS",
+            "CW Laser",
+            "DFB Laser",
+        ],
+    },
+
+    "AXT": {
+        "ticker": "AXTI",
+        "symbol": "AXTI",
+        "market": "US",
+        "exchange": "NASDAQ",
+        "categories": [
+            "ELS",
+            "InP Substrate / III-V Epitaxy",
         ],
     },
     "Corning": {
@@ -182,6 +205,50 @@ COMPANIES = {
             "MPO Connectors / Cables",
         ],
     },
+    "源傑科技": {
+        "ticker": "7917.TWO",
+        "symbol": "7917",
+        "market": "TW",
+        "exchange": "TPEx",
+        "categories": [
+            "Optical Engine",
+            "Optical Packaging",
+        ],
+    },
+
+    "聯亞": {
+        "ticker": "3081.TWO",
+        "symbol": "3081",
+        "market": "TW",
+        "exchange": "TPEx",
+        "categories": [
+            "ELS",
+            "InP Substrate / III-V Epitaxy",
+        ],
+    },
+
+    "全新": {
+        "ticker": "2455.TW",
+        "symbol": "2455",
+        "market": "TW",
+        "exchange": "TWSE",
+        "categories": [
+            "ELS",
+            "InP Substrate / III-V Epitaxy",
+        ],
+    },
+
+    "聯鈞": {
+        "ticker": "3450.TW",
+        "symbol": "3450",
+        "market": "TW",
+        "exchange": "TWSE",
+        "categories": [
+            "ELS",
+            "DFB Laser",
+        ],
+    },
+
     "華星光": {
         "ticker": "4979.TWO",
         "symbol": "4979",
@@ -211,12 +278,54 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 OUTPUT_PATH = OUTPUT_DIR / "cpo_stock_prices_1y.json"
 
 
-def download_one(ticker: str) -> pd.Series:
-    """下載單一 ticker 的 auto-adjusted Close。"""
+def load_existing_json() -> dict:
+    """讀取既有 JSON；若不存在或損壞就回傳空 dict。"""
+    if not OUTPUT_PATH.exists():
+        return {}
+
+    try:
+        with open(OUTPUT_PATH, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as exc:
+        print(f"[WARN] Existing JSON unreadable, rebuild full year: {exc}")
+        return {}
+
+
+def existing_series_map(payload: dict) -> dict:
+    """把既有 JSON 的 series 轉成 company -> pandas Series。"""
+    result = {}
+
+    for item in payload.get("series", []):
+        company = item.get("company")
+        prices = item.get("prices", [])
+
+        if not company or not prices:
+            continue
+
+        values = {}
+        for row in prices:
+            dt = row.get("date")
+            px = row.get("close")
+            if dt is None or px is None:
+                continue
+            values[pd.Timestamp(dt)] = float(px)
+
+        if values:
+            s = pd.Series(values, dtype=float).sort_index()
+            result[company] = s
+
+    return result
+
+
+def download_range(ticker: str, start_date: date, end_date: date) -> pd.Series:
+    """下載指定日期區間的 auto-adjusted Close；yfinance 的 end 為 exclusive。"""
+    if start_date >= end_date:
+        return pd.Series(dtype=float)
+
     df = yf.download(
         ticker,
-        start=START.isoformat(),
-        end=END.isoformat(),
+        start=start_date.isoformat(),
+        end=end_date.isoformat(),
         auto_adjust=True,
         progress=False,
         threads=False,
@@ -226,7 +335,6 @@ def download_one(ticker: str) -> pd.Series:
         return pd.Series(dtype=float)
 
     if isinstance(df.columns, pd.MultiIndex):
-        # yfinance 某些版本即使單 ticker 也可能回 MultiIndex
         close = df["Close"].iloc[:, 0]
     else:
         close = df["Close"]
@@ -243,29 +351,77 @@ def download_one(ticker: str) -> pd.Series:
 price_by_company = {}
 failed = []
 
-print(f"Downloading {len(COMPANIES)} tickers...")
+existing_payload = load_existing_json()
+existing_by_company = existing_series_map(existing_payload)
+
+print(f"Updating {len(COMPANIES)} tickers...")
 
 for company, info in COMPANIES.items():
     ticker = info["ticker"]
+    existing = existing_by_company.get(company, pd.Series(dtype=float))
+
+    if not existing.empty:
+        # 先裁成滾動一年，避免舊 JSON 無限變大
+        existing = existing[
+            (existing.index.date >= START) &
+            (existing.index.date < END)
+        ]
+
+    # 有既有資料：只從最後一天的下一天開始抓
+    # 沒有既有資料：第一次才抓完整一年
+    if not existing.empty:
+        last_existing = existing.index.max().date()
+        fetch_start = max(last_existing + timedelta(days=1), START)
+    else:
+        fetch_start = START
 
     try:
-        s = download_one(ticker)
+        new_data = download_range(ticker, fetch_start, END)
     except Exception as exc:
         print(f"[ERROR] {company} / {ticker}: {exc}")
+        # 若更新失敗但舊資料還在，保留舊資料，不整家公司消失
+        if not existing.empty:
+            price_by_company[company] = existing
+            print(
+                f"[KEEP] {company:18s} {ticker:10s} "
+                f"use existing through {existing.index[-1].date()}"
+            )
         failed.append({"company": company, "ticker": ticker, "error": str(exc)})
         continue
 
-    if s.empty:
+    if existing.empty and new_data.empty:
         print(f"[WARN] No price data: {company} / {ticker}")
         failed.append({"company": company, "ticker": ticker, "error": "no price data"})
         continue
 
-    price_by_company[company] = s
-    print(
-        f"[OK] {company:18s} {ticker:10s} "
-        f"{s.index[0].date()} -> {s.index[-1].date()} "
-        f"({len(s)} trading days)"
-    )
+    if new_data.empty:
+        merged = existing.copy()
+        print(
+            f"[SKIP] {company:18s} {ticker:10s} "
+            f"already up to date through {merged.index[-1].date()}"
+        )
+    else:
+        merged = pd.concat([existing, new_data])
+        merged = merged[~merged.index.duplicated(keep="last")].sort_index()
+        merged = merged[
+            (merged.index.date >= START) &
+            (merged.index.date < END)
+        ]
+
+        if existing.empty:
+            print(
+                f"[INIT] {company:18s} {ticker:10s} "
+                f"{merged.index[0].date()} -> {merged.index[-1].date()} "
+                f"({len(merged)} trading days)"
+            )
+        else:
+            print(
+                f"[ADD]  {company:18s} {ticker:10s} "
+                f"{new_data.index[0].date()} -> {new_data.index[-1].date()} "
+                f"(+{len(new_data)} rows, total {len(merged)})"
+            )
+
+    price_by_company[company] = merged
 
 
 # =========================================================
