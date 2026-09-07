@@ -14,7 +14,6 @@ import yfinance as yf
 #    - 排除 Sumitomo Electric
 #    - 上櫃股票使用 .TWO
 #    - 分類與文章 BOM 表對齊：
-#      父層分類會包含其子項中的上市公司
 #      例如 Optical Engine 會帶入 MLA / PIC / PD / Packaging，
 #      ELS 會帶入 CW Laser / DFB Laser。
 #    - 新增 AAOI、AXTI、源傑科技(7917)、聯亞(3081)、全新(2455)、聯鈞(3450)。
@@ -57,6 +56,8 @@ COMPANIES = {
             "ELS",
             "CW Laser",
             "DFB Laser",
+            "EML",
+            "Optical Transceiver / Pluggable",
         ],
     },
     "Lumentum Holdings": {
@@ -65,11 +66,13 @@ COMPANIES = {
         "market": "US",
         "exchange": "NASDAQ",
         "categories": [
-            "Optical Engine",
             "200G/lane Photodetector / PD",
             "ELS",
             "CW Laser",
             "DFB Laser",
+            "EML",
+            "LD / PD / APD",
+            "Optical Transceiver / Pluggable",
         ],
     },
     "Applied Optoelectronics": {
@@ -81,6 +84,7 @@ COMPANIES = {
             "ELS",
             "CW Laser",
             "DFB Laser",
+            "Optical Transceiver / Pluggable",
         ],
     },
 
@@ -90,7 +94,6 @@ COMPANIES = {
         "market": "US",
         "exchange": "NASDAQ",
         "categories": [
-            "ELS",
             "InP Substrate / III-V Epitaxy",
         ],
     },
@@ -115,63 +118,63 @@ COMPANIES = {
         "symbol": "2330",
         "market": "TW",
         "exchange": "TWSE",
-        "categories": ["Optical Engine", "PIC / SiPh Chip", "Optical Packaging"],
+        "categories": ["PIC / SiPh Chip", "Optical Packaging"],
     },
     "日月光投控": {
         "ticker": "3711.TW",
         "symbol": "3711",
         "market": "TW",
         "exchange": "TWSE",
-        "categories": ["Optical Engine", "Optical Packaging"],
+        "categories": ["Optical Packaging"],
     },
     "大立光": {
         "ticker": "3008.TW",
         "symbol": "3008",
         "market": "TW",
         "exchange": "TWSE",
-        "categories": ["Optical Engine", "MLA / Micro Optics", "Metalens", "Prism"],
+        "categories": ["MLA / Micro Optics", "Metalens", "Prism"],
     },
     "玉晶光": {
         "ticker": "3406.TW",
         "symbol": "3406",
         "market": "TW",
         "exchange": "TWSE",
-        "categories": ["Optical Engine", "MLA / Micro Optics", "Prism"],
+        "categories": ["MLA / Micro Optics", "Prism"],
     },
     "采鈺": {
         "ticker": "6789.TW",
         "symbol": "6789",
         "market": "TW",
         "exchange": "TWSE",
-        "categories": ["Optical Engine", "Metalens"],
+        "categories": ["Metalens"],
     },
     "亞光": {
         "ticker": "3019.TW",
         "symbol": "3019",
         "market": "TW",
         "exchange": "TWSE",
-        "categories": ["Optical Engine", "Metalens", "Prism"],
+        "categories": ["Metalens", "Prism"],
     },
     "中揚光": {
         "ticker": "6668.TW",
         "symbol": "6668",
         "market": "TW",
         "exchange": "TWSE",
-        "categories": ["Optical Engine", "Metalens"],
+        "categories": ["Metalens"],
     },
     "揚明光": {
         "ticker": "3504.TW",
         "symbol": "3504",
         "market": "TW",
         "exchange": "TWSE",
-        "categories": ["Optical Engine", "Prism"],
+        "categories": ["Prism"],
     },
     "先進光": {
         "ticker": "3362.TWO",
         "symbol": "3362",
         "market": "TW",
         "exchange": "TPEx",
-        "categories": ["Optical Engine", "Prism"],
+        "categories": ["Prism"],
     },
     "上詮": {
         "ticker": "3363.TWO",
@@ -212,7 +215,8 @@ COMPANIES = {
         "exchange": "TPEx",
         "categories": [
             "Optical Engine",
-            "Optical Packaging",
+            "Optical Transceiver / Pluggable",
+            "AOC",
         ],
     },
 
@@ -222,8 +226,9 @@ COMPANIES = {
         "market": "TW",
         "exchange": "TPEx",
         "categories": [
-            "ELS",
             "InP Substrate / III-V Epitaxy",
+            "EML",
+            "LD / PD / APD",
         ],
     },
 
@@ -233,8 +238,8 @@ COMPANIES = {
         "market": "TW",
         "exchange": "TWSE",
         "categories": [
-            "ELS",
             "InP Substrate / III-V Epitaxy",
+            "LD / PD / APD",
         ],
     },
 
@@ -244,8 +249,8 @@ COMPANIES = {
         "market": "TW",
         "exchange": "TWSE",
         "categories": [
-            "ELS",
             "DFB Laser",
+            "Optical Packaging",
         ],
     },
 
@@ -254,14 +259,69 @@ COMPANIES = {
         "symbol": "4979",
         "market": "TW",
         "exchange": "TPEx",
-        "categories": ["ELS", "CW Laser", "DFB Laser"],
+        "categories": ["CW Laser", "DFB Laser", "EML", "Optical Transceiver / Pluggable"],
     },
     "光聖": {
         "ticker": "6442.TW",
         "symbol": "6442",
         "market": "TW",
         "exchange": "TWSE",
-        "categories": ["Single Mode Fiber"],
+        "categories": ["MPO Connectors / Cables"],
+    },
+
+    # ===== 高速光通訊延伸 =====
+    "前鼎": {
+        "ticker": "4908.TWO",
+        "symbol": "4908",
+        "market": "TW",
+        "exchange": "TPEx",
+        "categories": ["Optical Transceiver / Pluggable"],
+    },
+    "眾達-KY": {
+        "ticker": "4977.TW",
+        "symbol": "4977",
+        "market": "TW",
+        "exchange": "TPEx",
+        "categories": ["Optical Transceiver / Pluggable"],
+    },
+    "環宇-KY": {
+        "ticker": "4991.TWO",
+        "symbol": "4991",
+        "market": "TW",
+        "exchange": "TPEx",
+        "categories": ["LD / PD / APD"],
+    },
+    "光環": {
+        "ticker": "3234.TWO",
+        "symbol": "3234",
+        "market": "TW",
+        "exchange": "TPEx",
+        "categories": ["LD / PD / APD"],
+    },
+    "訊芯-KY": {
+        "ticker": "6451.TW",
+        "symbol": "6451",
+        "market": "TW",
+        "exchange": "TWSE",
+        "categories": [
+            "Optical Engine",
+            "Optical Packaging",
+            "Optical Transceiver / Pluggable",
+        ],
+    },
+    "統新": {
+        "ticker": "6426.TW",
+        "symbol": "6426",
+        "market": "TW",
+        "exchange": "TPEx",
+        "categories": ["Optical Filter"],
+    },
+    "東典": {
+        "ticker": "6588.TWO",
+        "symbol": "6588",
+        "market": "TW",
+        "exchange": "TPEx",
+        "categories": ["Optical Filter / WDM"],
     },
 }
 
