@@ -14,8 +14,6 @@ import yfinance as yf
 #    - 排除 Sumitomo Electric
 #    - 上櫃股票使用 .TWO
 #    - 分類與文章 BOM 表對齊：
-#      例如 Optical Engine 會帶入 MLA / PIC / PD / Packaging，
-#      ELS 會帶入 CW Laser / DFB Laser。
 #    - 新增 AAOI、AXTI、源傑科技(7917)、聯亞(3081)、全新(2455)、聯鈞(3450)。
 #    - 上游材料分類統一為 "InP Substrate / III-V Epitaxy"。
 # =========================================================
@@ -57,7 +55,9 @@ COMPANIES = {
             "CW Laser",
             "DFB Laser",
             "EML",
+            "LD / PD / APD",
             "Optical Transceiver / Pluggable",
+            "AOC",
         ],
     },
     "Lumentum Holdings": {
@@ -81,7 +81,6 @@ COMPANIES = {
         "market": "US",
         "exchange": "NASDAQ",
         "categories": [
-            "ELS",
             "CW Laser",
             "DFB Laser",
             "Optical Transceiver / Pluggable",
@@ -111,6 +110,61 @@ COMPANIES = {
         "exchange": "NYSE",
         "categories": ["MPO Connectors / Cables"],
     },
+    "Ciena": {
+        "ticker": "CIEN",
+        "symbol": "CIEN",
+        "market": "US",
+        "exchange": "NYSE",
+        "categories": [
+            "Coherent Optics / DCI",
+            "Optical Transceiver / Pluggable",
+            "Optical Networking",
+        ],
+    },
+    "Fabrinet": {
+        "ticker": "FN",
+        "symbol": "FN",
+        "market": "US",
+        "exchange": "NYSE",
+        "categories": [
+            "Optical Packaging",
+            "Optical Transceiver / Pluggable",
+        ],
+    },
+    "Arista Networks": {
+        "ticker": "ANET",
+        "symbol": "ANET",
+        "market": "US",
+        "exchange": "NYSE",
+        "categories": [
+            "Optical Transceiver / Pluggable",
+            "AOC",
+            "Optical Networking",
+        ],
+    },
+
+    "Cisco Systems": {
+        "ticker": "CSCO",
+        "symbol": "CSCO",
+        "market": "US",
+        "exchange": "NASDAQ",
+        "categories": [
+            "Coherent Optics / DCI",
+            "Optical Transceiver / Pluggable",
+            "Optical Networking",
+        ],
+    },
+    "Nokia": {
+        "ticker": "NOK",
+        "symbol": "NOK",
+        "market": "US",
+        "exchange": "NYSE",
+        "categories": [
+            "Coherent Optics / DCI",
+            "Optical Networking",
+        ],
+    },
+
 
     # ===== 台灣 =====
     "台積電": {
@@ -132,7 +186,12 @@ COMPANIES = {
         "symbol": "3008",
         "market": "TW",
         "exchange": "TWSE",
-        "categories": ["MLA / Micro Optics", "Metalens", "Prism"],
+        "categories": [
+            "FAU",
+            "MLA / Micro Optics",
+            "Metalens",
+            "Prism",
+        ],
     },
     "玉晶光": {
         "ticker": "3406.TW",
@@ -181,7 +240,12 @@ COMPANIES = {
         "symbol": "3363",
         "market": "TW",
         "exchange": "TPEx",
-        "categories": ["FAU", "Fiber Array / V-Groove", "MPO Connectors / Cables"],
+        "categories": [
+            "FAU",
+            "Fiber Array / V-Groove",
+            "MPO Connectors / Cables",
+            "Single Mode Fiber",
+        ],
     },
     "波若威": {
         "ticker": "3163.TWO",
@@ -194,6 +258,7 @@ COMPANIES = {
             "Shuffle Box",
             "MPO Connectors / Cables",
             "Single Mode Fiber",
+            "Optical Filter / WDM",
         ],
     },
     "貿聯-KY": {
@@ -202,10 +267,10 @@ COMPANIES = {
         "market": "TW",
         "exchange": "TWSE",
         "categories": [
-            "FAU",
             "Fiber Array / V-Groove",
             "Shuffle Box",
             "MPO Connectors / Cables",
+            "Single Mode Fiber",
         ],
     },
     "源傑科技": {
@@ -250,7 +315,6 @@ COMPANIES = {
         "exchange": "TWSE",
         "categories": [
             "DFB Laser",
-            "Optical Packaging",
         ],
     },
 
@@ -266,7 +330,12 @@ COMPANIES = {
         "symbol": "6442",
         "market": "TW",
         "exchange": "TWSE",
-        "categories": ["MPO Connectors / Cables"],
+        "categories": [
+            "MPO Connectors / Cables",
+            "Single Mode Fiber",
+            "Optical Transceiver / Pluggable",
+            "AOC",
+        ],
     },
 
     # ===== 高速光通訊延伸 =====
@@ -296,7 +365,10 @@ COMPANIES = {
         "symbol": "3234",
         "market": "TW",
         "exchange": "TPEx",
-        "categories": ["LD / PD / APD"],
+        "categories": [
+            "LD / PD / APD",
+            "AOC",
+        ],
     },
     "訊芯-KY": {
         "ticker": "6451.TW",
@@ -304,7 +376,6 @@ COMPANIES = {
         "market": "TW",
         "exchange": "TWSE",
         "categories": [
-            "Optical Engine",
             "Optical Packaging",
             "Optical Transceiver / Pluggable",
         ],
@@ -314,7 +385,9 @@ COMPANIES = {
         "symbol": "6426",
         "market": "TW",
         "exchange": "TPEx",
-        "categories": ["Optical Filter"],
+        "categories": [
+            "Optical Filter / WDM",
+        ],
     },
     "東典": {
         "ticker": "6588.TWO",
@@ -322,6 +395,15 @@ COMPANIES = {
         "market": "TW",
         "exchange": "TPEx",
         "categories": ["Optical Filter / WDM"],
+    },
+    "IET-KY": {
+        "ticker": "4971.TWO",
+        "symbol": "4971",
+        "market": "TW",
+        "exchange": "TPEx",
+        "categories": [
+            "InP Substrate / III-V Epitaxy",
+        ],
     },
 }
 
