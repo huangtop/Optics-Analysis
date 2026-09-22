@@ -12,7 +12,7 @@ import yfinance as yf
 # 1) 公司與分類
 #    - 上櫃股票使用 .TWO
 #    - 分類與 TGV 文章供應鏈表對齊
-#    - "TGV" 為總分類，可直接供 [supply_chain_chart type="mlcc" category="TGV"] 使用
+#    - "TGV" 為總分類，可直接供 [supply_chain_chart type="tgv" category="TGV"] 使用
 # =========================================================
 
 COMPANIES = {
@@ -113,25 +113,62 @@ COMPANIES = {
 
     # ===== 美國 =====
     "Intel": {
-        "ticker": "INTC", "symbol": "INTC", "market": "US", "exchange": "NASDAQ",
-        "categories": ["TGV", "TGV Glass Core", "Glass Core / RDL / IC Substrate Integration",
-                       "AI / HPC / CPO Applications"],
+        "ticker": "INTC",
+        "symbol": "INTC",
+        "market": "US",
+        "exchange": "NASDAQ",
+        "categories": [
+            "TGV",
+            "TGV Glass Core",
+            "Metallization / Seed Layer / Copper Filling",
+            "Glass Core / RDL / IC Substrate Integration",
+            "AI / HPC / CPO Applications",
+        ],
     },
+
     "Corning": {
-        "ticker": "GLW", "symbol": "GLW", "market": "US", "exchange": "NYSE",
-        "categories": ["TGV", "Glass Material / Processing"],
+        "ticker": "GLW",
+        "symbol": "GLW",
+        "market": "US",
+        "exchange": "NYSE",
+        "categories": [
+            "TGV",
+            "Glass Material / Processing",
+            "TGV Glass Core",
+        ],
     },
+
     "Coherent": {
-        "ticker": "COHR", "symbol": "COHR", "market": "US", "exchange": "NYSE",
-        "categories": ["TGV", "TGV Laser / Via Formation"],
+        "ticker": "COHR",
+        "symbol": "COHR",
+        "market": "US",
+        "exchange": "NYSE",
+        "categories": [
+            "TGV",
+            "TGV Laser / Via Formation",
+        ],
     },
+
     "Onto Innovation": {
-        "ticker": "ONTO", "symbol": "ONTO", "market": "US", "exchange": "NYSE",
-        "categories": ["TGV", "Inspection / Metrology"],
+        "ticker": "ONTO",
+        "symbol": "ONTO",
+        "market": "US",
+        "exchange": "NYSE",
+        "categories": [
+            "TGV",
+            "Inspection / Metrology",
+        ],
     },
+
     "KLA": {
-        "ticker": "KLAC", "symbol": "KLAC", "market": "US", "exchange": "NASDAQ",
-        "categories": ["TGV", "Inspection / Metrology"],
+        "ticker": "KLAC",
+        "symbol": "KLAC",
+        "market": "US",
+        "exchange": "NASDAQ",
+        "categories": [
+            "TGV",
+            "Inspection / Metrology",
+        ],
     },
 }
 
