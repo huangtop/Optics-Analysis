@@ -34,11 +34,16 @@ jobs:
         run: |
           python "CPO Price.py"
           python "MLCC Price.py"
+          python "TGV Price.py"
+          python "Packaging Test Price.py"
+
 
       - name: Check generated JSON
         run: |
           ls -lh public/data/cpo_stock_prices_1y.json
           ls -lh public/data/mlcc_stock_prices_1y.json
+          ls -lh public/data/tgv_stock_prices_1y.json
+          ls -lh public/data/semiconductor_test_stock_prices_1y.json
 
       - name: Commit updated data
         run: |
