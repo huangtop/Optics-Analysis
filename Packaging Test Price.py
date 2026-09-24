@@ -49,6 +49,26 @@ COMPANIES = {
         "ticker": "6257.TW", "symbol": "6257", "market": "TW", "exchange": "TWSE",
         "categories": ["Semiconductor Packaging & Test", "Final Test / Package Test", "Burn-In / Reliability Test", "System Level Test / SLT"],
     },
+    "欣銓": {
+        "ticker": "3264.TWO", "symbol": "3264", "market": "TW", "exchange": "TPEx",
+        "categories": ["Semiconductor Packaging & Test", "Wafer Test / Circuit Probe", "Final Test / Package Test"],
+    },
+    "南茂": {
+        "ticker": "8150.TW", "symbol": "8150", "market": "TW", "exchange": "TWSE",
+        "categories": ["Semiconductor Packaging & Test", "Advanced Packaging / OSAT", "Wafer Test / Circuit Probe", "Final Test / Package Test", "Display Driver IC Packaging & Test"],
+    },
+    "頎邦": {
+        "ticker": "6147.TWO", "symbol": "6147", "market": "TW", "exchange": "TPEx",
+        "categories": ["Semiconductor Packaging & Test", "Advanced Packaging / OSAT", "Wafer Test / Circuit Probe", "Final Test / Package Test", "Display Driver IC Packaging & Test"],
+    },
+    "超豐": {
+        "ticker": "2441.TW", "symbol": "2441", "market": "TW", "exchange": "TWSE",
+        "categories": ["Semiconductor Packaging & Test", "Advanced Packaging / OSAT", "Wafer Test / Circuit Probe", "Final Test / Package Test"],
+    },
+    "華泰": {
+        "ticker": "2329.TW", "symbol": "2329", "market": "TW", "exchange": "TWSE",
+        "categories": ["Semiconductor Packaging & Test", "Advanced Packaging / OSAT", "Wafer Test / Circuit Probe", "Final Test / Package Test", "Burn-In / Reliability Test"],
+    },
 
     # ===== 美國 =====
     "Amkor Technology": {
@@ -70,6 +90,14 @@ COMPANIES = {
     "FormFactor": {
         "ticker": "FORM", "symbol": "FORM", "market": "US", "exchange": "NASDAQ",
         "categories": ["Semiconductor Packaging & Test", "Probe / Probe Card / Wafer Probe", "HBM Test"],
+    },
+    "ChipMOS Technologies ADR": {
+        "ticker": "IMOS", "symbol": "IMOS", "market": "US", "exchange": "NASDAQ",
+        "categories": ["Semiconductor Packaging & Test", "Advanced Packaging / OSAT", "Wafer Test / Circuit Probe", "Final Test / Package Test", "Display Driver IC Packaging & Test"],
+    },
+    "Aehr Test Systems": {
+        "ticker": "AEHR", "symbol": "AEHR", "market": "US", "exchange": "NASDAQ",
+        "categories": ["Semiconductor Packaging & Test", "Wafer Test / Circuit Probe", "Burn-In / Reliability Test", "System Level Test / SLT", "CPO / Silicon Photonics Test"],
     },
 }
 
